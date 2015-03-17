@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import StoreKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,SKStoreProductViewControllerDelegate {
     var openappstore = false
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +68,7 @@ class ViewController: UIViewController {
     }
     @IBAction func sz() {
             if openappstore && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-apps://")!) {
-            UIApplication.sharedApplication().openURL(NSURL(string: "itms-apps://itunes.apple.com/de/app/suddeutsche.de-nachrichten/id338711072")!)
+            openappstore("338711072")
         } else {
             UIApplication.sharedApplication().openURL(NSURL(string: "http://sueddeutsche.de")!)
         }
@@ -77,7 +78,7 @@ class ViewController: UIViewController {
             UIApplication.sharedApplication().openURL(NSURL(string: "comgooglenews://")!)
         } else {
             if openappstore && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-apps://")!) {
-                UIApplication.sharedApplication().openURL(NSURL(string: "itms-apps://itunes.apple.com/de/app/google-news-weather/id913753848")!)
+                openappstore("913753848")
             } else {
                 UIApplication.sharedApplication().openURL(NSURL(string: "https://news.google.de")!)
             }
@@ -88,7 +89,7 @@ class ViewController: UIViewController {
             UIApplication.sharedApplication().openURL(NSURL(string: "welt://")!)
         } else {
             if openappstore && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-apps://")!) {
-                UIApplication.sharedApplication().openURL(NSURL(string: "itms-apps://itunes.apple.com/de/app/die-welt-aktuelle-nachrichten/id340021100")!)
+                openappstore("340021100")
             } else {
                 UIApplication.sharedApplication().openURL(NSURL(string: "http://welt.de")!)
             }
@@ -99,13 +100,21 @@ class ViewController: UIViewController {
             UIApplication.sharedApplication().openURL(NSURL(string: "fb616927995042097://")!)
         } else {
             if openappstore && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-apps://")!) {
-                UIApplication.sharedApplication().openURL(NSURL(string: "itms-apps://itunes.apple.com/de/app/faz.net/id375948652")!)
+                openappstore("375948652")
             } else {
                 UIApplication.sharedApplication().openURL(NSURL(string: "http://faz.net")!)
             }
         }
     }
-
+    func productViewControllerDidFinish(viewController: SKStoreProductViewController!) {
+        viewController.dismissViewControllerAnimated(true, completion: nil)
+    }
+    func openappstore(id:String) {
+        let controller = SKStoreProductViewController()
+        controller.delegate = self
+        controller.loadProductWithParameters([SKStoreProductParameterITunesItemIdentifier:id], completionBlock: nil)
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
